@@ -1,0 +1,111 @@
+/* Reset & Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+    text-align: center;
+}
+
+/* Background Styling */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #1f2818, #7d9363); /* Green gradient */
+    color: white;
+}
+
+/* Queue Display Container */
+.queue-container {
+    background: linear-gradient(to bottom, #2b3820, #7d9363);
+    border-radius: 20px;
+    padding: 50px;
+    width: 95%;
+    max-width: 900px; /* Increased max width */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border: 3px solid #2b5d34; /* Green border */
+}
+
+/* Header */
+.queue-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    font-size: 24px; /* Increased size */
+    font-weight: bold;
+}
+
+/* Queue Lists */
+.queue-lists {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.regular-list, .priority-list {
+    text-align: left;
+}
+
+.regular-list p, .priority-list p {
+    font-size: 22px; /* Bigger text for visibility */
+    padding: 5px 0;
+}
+
+/* Now Serving Section */
+.now-serving {
+    margin-top: 30px;
+}
+
+.now-serving p {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.now-serving h1 {
+    font-size: 50px; /* Bigger emphasis */
+    font-weight: bold;
+    color: #FFD700; /* Gold highlight */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Back Button */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 60px; /* Adjust size as needed */
+    height: auto;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.back-button img {
+    width: 80px;
+    height: auto;
+    margin-right: 5px;
+}
+
+.back-button img:hover {
+    opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .queue-container {
+        padding: 30px;
+    }
+
+    .queue-header h2 {
+        font-size: 20px;
+    }
+
+    .regular-list p, .priority-list p {
+        font-size: 20px;
+    }
+
+    .now-serving h1 {
+        font-size: 40px;
+    }
+}

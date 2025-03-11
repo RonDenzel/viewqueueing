@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Display</title>
+    <link rel="stylesheet" href="viewque.css">
+    
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAn2WHhyPfyYV0rj5oZRo6MQK5HDbucIbo",
+            authDomain: "queueing-8976a.firebaseapp.com",
+            databaseURL: "https://queueing-8976a-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "queueing-8976a",
+            storageBucket: "queueing-8976a.firebasestorage.app",
+            messagingSenderId: "10213448291",
+            appId: "1:10213448291:web:2d07230ebe2fe2a9f0f656"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // References
+        const queueRef = ref(database, 'queue');
+        const nowServingRef = ref(database, 'nowServing');
+        const skippedRef = ref(database, 'skipped');
+
+        // Listen for queue changes
+        onValue(queueRef, (snapshot) => {
+            const data = snapshot.val();
+            updateQueueDisplay(data);
+        });
+
+        // Listen for now serving changes
+        onValue(nowServingRef, (snapshot) => {
+            const data = snapshot.val();
+            updateNowServingDisplay(data);
+        });
+
+        // Listen for skipped queue changes
+        onValue(skippedRef, (snapshot) => {
+            const data = snapshot.val();
+            updateSkippedDisplay(data);
+        });
+
+        function updateQueueDisplay(data) {
+            const regularList = document.querySelector('.regular-list');
+            const priorityList = document.querySelector('.priority-list');
+            
+            regularList.innerHTML = '';
+            priorityList.innerHTML = '';
+
+            if (data) {
+                const regularQueue = [];
+                const priorityQueue = [];
+
+                Object.values(data).forEach(entry => {
+                    if (entry.status === 'waiting') {
+                        if (entry.laneType === 'regular') {
+                            regularQueue.push(entry.queueNumber);
+                        } else {
+                            priorityQueue.push(entry.queueNumber);
+                        }
+                    }
+                });
+
+                // Sort queue numbers
+                regularQueue.sort();
+                priorityQueue.sort();
+
+                // Update display
+                regularList.innerHTML = regularQueue.map(num => `<p>${num}</p>`).join('');
+                priorityList.innerHTML = priorityQueue.map(num => `<p>${num}</p>`).join('');
+            }
+        }
+
+        function updateNowServingDisplay(data) {
+            const nowServingElement = document.getElementById('nowServing');
+            
+            if (data && data.queueNumber) {
+                nowServingElement.textContent = data.queueNumber;
+            } else {
+                nowServingElement.textContent = '---';
+            }
+        }
+
+        function updateSkippedDisplay(data) {
+            const skippedList = document.querySelector('.skipped-list');
+            skippedList.innerHTML = '';
+
+            if (data) {
+                const skippedNumbers = Object.values(data).map(entry => entry.queueNumber);
+                skippedList.innerHTML = skippedNumbers.map(num => `<p>${num}</p>`).join('');
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Queue Display Container -->
+    <div class="queue-container">
+        <div class="queue-header">
+            <h2>REGULAR</h2>
+            <h2>PRIORITY</h2>
+        </div>
+
+        <div class="queue-lists">
+            <div class="regular-list"></div>
+            <div class="priority-list"></div>
+        </div>
+
+        <div class="now-serving">
+            <p>NOW SERVING:</p>
+            <h1 id="nowServing">---</h1>
+        </div>
+
+        <div class="skipped-container">
+            <h3>Skipped Numbers</h3>
+            <div class="skipped-list"></div>
+        </div>
+    </div>
+</body>
+</html>
